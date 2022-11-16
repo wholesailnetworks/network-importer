@@ -362,45 +362,45 @@ class NetBoxAPIAdapter(BaseAdapter):
 
         nbr_cables = 0
         for nb_cable in cables:
-            if nb_cable.termination_a_type != "dcim.interface" or nb_cable.termination_b_type != "dcim.interface":
+            if nb_cable.a_terminations[0] != "dcim.interface" or nb_cable.b_terminations[0] != "dcim.interface":
                 continue
 
-            if (nb_cable.termination_a.device.name not in device_names) and (
-                nb_cable.termination_b.device.name not in device_names
+            if (nb_cable.a_terminations[0].device.name not in device_names) and (
+                nb_cable.b_terminations[0].device.name not in device_names
             ):
                 LOGGER.debug(
                     "%s | Skipping cable %s because neither devices (%s, %s) is in the list of devices",
                     self.name,
                     nb_cable.id,
-                    nb_cable.termination_a.device.name,
-                    nb_cable.termination_b.device.name,
+                    nb_cable.a_terminations[0].device.name,
+                    nb_cable.b_terminations[0].device.name,
                 )
                 continue
 
             # Disabling this check for now until we are able to allow user to control how cabling should be imported
-            # if nb_cable.termination_a.device.name not in device_names:
+            # if nb_cable.a_terminations[0].device.name not in device_names:
             #     LOGGER.debug(
             #         "%s | Skipping cable %s because %s is not in the list of devices",
             #         self.name,
             #         nb_cable.id,
-            #         nb_cable.termination_a.device.name,
+            #         nb_cable.a_terminations[0].device.name,
             #     )
             #     continue
 
-            # if nb_cable.termination_b.device.name not in device_names:
+            # if nb_cable.b_terminations[0].device.name not in device_names:
             #     LOGGER.debug(
             #         "%s | Skipping cable %s because %s is not in the list of devices",
             #         self.name,
             #         nb_cable.id,
-            #         nb_cable.termination_b.device.name,
+            #         nb_cable.b_terminations[0].device.name,
             #     )
             #     continue
 
             cable = self.cable(
-                device_a_name=nb_cable.termination_a.device.name,
-                interface_a_name=nb_cable.termination_a.name,
-                device_z_name=nb_cable.termination_b.device.name,
-                interface_z_name=nb_cable.termination_b.name,
+                device_a_name=nb_cable.a_terminations[0].device.name,
+                interface_a_name=nb_cable.a_terminations[0].name,
+                device_z_name=nb_cable.b_terminations[0].device.name,
+                interface_z_name=nb_cable.b_terminations[0].name,
                 remote_id=nb_cable.id,
             )
 
