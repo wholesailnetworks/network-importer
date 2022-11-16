@@ -300,8 +300,8 @@ class NetBoxAPIAdapter(BaseAdapter):
             except ObjectNotFound:
                 LOGGER.debug("%s | VLAN %s is not present for site %s", self.name, intf.untagged_vlan.vid, site.name)
 
-        if intf.connected_endpoint_type:
-            interface.connected_endpoint_type = intf.connected_endpoint_type
+        if intf.connected_endpoints:
+            interface.connected_endpoints = intf.connected_endpoints
 
         new_intf, created = self.get_or_add(interface)
         if created:
@@ -442,8 +442,8 @@ class NetBoxAPIAdapter(BaseAdapter):
         intf = self.interface(name=intf_name, device_name=device_name, remote_id=intfs[0].id)
         intf = self.apply_model_flag(intf, intfs[0])
 
-        if intfs[0].connected_endpoint_type:
-            intf.connected_endpoint_type = intfs[0].connected_endpoint_type
+        if intfs[0].connected_endpoints:
+            intf.connected_endpoints = intfs[0].connected_endpoints
 
         self.add(intf)
 
